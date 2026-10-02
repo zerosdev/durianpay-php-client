@@ -122,3 +122,32 @@ $order = $durianpay->orders()
     
 print_r($order);
 ```
+
+### Custom Guzzle options
+
+If you want to use custom Guzzle options (e.g connect_timeout), you can do it by using `setGuzzleOptions()` method as follow:
+
+```php
+Durianpay::setGuzzleOptions([
+        'connect_timeout' => 10,
+        'timeout' => 30,
+        //...
+    ])
+    ->orders()
+    ->setAmount(10000);
+```
+
+or
+
+```php
+$durianpay = new Client('your_api_key_here');
+
+$durianpay
+    ->setGuzzleOptions([
+        'connect_timeout' => 10,
+        'timeout' => 30,
+        //...
+    ])
+    ->orders()
+    ->setAmount(10000);
+```
