@@ -20,6 +20,7 @@ class Client
     protected $request_method;
     protected $request_payload = [];
     protected $request_headers = [];
+    protected $guzzle_options = [];
     protected $response;
 
     public function __construct(string $api_key = null, string $mode = 'production')
@@ -50,14 +51,15 @@ class Client
         ]);
 
         $self = $this;
-        $this->http = new GuzzleClient([
+        $guzzleOptions = array_merge([
             'base_uri'		=> Constant::URL_API,
             'http_errors' 	=> false,
             'headers'		=> $this->getRequestHeaders(),
             'on_stats' => function (TransferStats $s) use (&$self) {
                 $self->setRequestUrl(strval($s->getEffectiveUri()));
             }
-        ]);
+        ], $this->getGuzzleOptions() ?? []);
+        $this->http = new GuzzleClient($guzzleOptions);
     }
 
     public function request($endpoint, $method = 'GET', $content_type = Constant::CONTENT_FORM)
